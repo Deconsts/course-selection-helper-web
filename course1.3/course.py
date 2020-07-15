@@ -50,12 +50,15 @@ def course_list(header, deptlds):
     return response
     
 # post for course
-def course_post(header, deptlds, sids):
+def course_post(header, deptlds, sids, coursec):
     url = "http://jwxk.ucas.ac.cn/courseManageBachelor/saveCourse"
     data = {
         "deptlds": deptlds,
         "sids": sids
     }
+    if coursec:
+        data['c_' + sids] = 'f'
+        print(data)
     requests.post(url, headers = header, data = data)
 
 # check state
@@ -68,16 +71,14 @@ def check_course(headers, course_id, course_name):
     return "选课失败"
 
 # entry of course selection
-def select_course(header, course_id, course_name, coursec, response):
+def select_course(header, course_id, course_name, coursec, response, deptld):
     new_header = header.copy()
     sid = find_course(response, course_id, course_name)
     if sid == '0':
         return "找不到课程"
     if sid == '00':
         return "登录失败"
-    if coursec:
-        new_header['c_'+sid] = 1
-    course_post(new_header, deptld, sid)
+    course_post(new_header, deptld, sid, coursec)
     return check_course(header, course_id, course_name)
 
 # entry
@@ -121,7 +122,7 @@ def entry():
     course_select_list = course_list(header, deptld)
     for i in range(3, len(courses), 3):
         if courses[i + 1] or courses[i + 2]:
-            result = select_course(header, courses[i + 1], courses[i + 2], courses[i], course_select_list)
+            result = select_course(header, courses[i + 1], courses[i + 2], courses[i], course_select_list, deptld)
             print(courses[i + 1] + courses[i + 2] + result)
             if result == "选课成功":
                 content = read("success")
