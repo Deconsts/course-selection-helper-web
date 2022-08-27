@@ -2,7 +2,7 @@
 Designed for UCAS course selection system. Visited by Internet explorer.  UCAS抢课工具
 
 ## 访问方式
-http://114.116.225.190:9091/
+由于服务器到期，网页访问入口不再开放。并且尚不支持验证码选课。 2022.8.27  
 
 ## 代码运行环境
 Linux 系统  
